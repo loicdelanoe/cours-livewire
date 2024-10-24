@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Livewire\Attributes\Computed;
 
 class Organization extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = ['account_id', 'name', 'email', 'phone', 'address', 'city', 'region', 'country', 'postal_code'];
 
     public function resolveRouteBinding($value, $field = null)
     {
