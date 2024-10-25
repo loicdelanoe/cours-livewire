@@ -27,6 +27,8 @@ class OrganizationsEdit extends Component
         $this->form->update();
 
         $this->dispatch('organization-edit');
+
+        $this->feedback = 'Organization updated successfully';
     }
 
     public function render(): View

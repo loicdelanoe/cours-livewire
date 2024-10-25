@@ -1,38 +1,28 @@
-<main class="main-content px-4 py-8 md:flex-1 md:p-12 md:overflow-y-auto relative">
-    <template x-if="$wire.feedback">
-        <div
-            class="dissolve absolute top-6 left-24 flex items-center justify-between mb-8 max-w-3xl bg-green-500 rounded w-full"
-            x-data="{
-                init() {
-                    setTimeout(function() {
-                        $wire.feedback = false;
-                        $wire.loading = true;
-                    }, 2000)
-                }
-        }">
-            <div class="flex items-center">
-                <svg class="shrink-0 ml-4 mr-2 w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg"
-                     viewBox="0 0 20 20">
-                    <polygon points="0 11 2 9 7 14 18 3 20 5 7 18"></polygon>
-                </svg>
-                <div class="py-4 text-white text-sm font-medium" x-html="$wire.feedback"></div>
-            </div>
-            <button type="button" class="group mr-2 p-2" @click="$wire.feedback = false">
-                <svg class="block w-2 h-2 fill-green-800 group-hover:fill-white" xmlns="http://www.w3.org/2000/svg"
-                     width="235.908" height="235.908" viewBox="278.046 126.846 235.908 235.908">
-                    <path
-                        d="M506.784 134.017c-9.56-9.56-25.06-9.56-34.62 0L396 210.18l-76.164-76.164c-9.56-9.56-25.06-9.56-34.62 0-9.56 9.56-9.56 25.06 0 34.62L361.38 244.8l-76.164 76.165c-9.56 9.56-9.56 25.06 0 34.62 9.56 9.56 25.06 9.56 34.62 0L396 279.42l76.164 76.165c9.56 9.56 25.06 9.56 34.62 0 9.56-9.56 9.56-25.06 0-34.62L430.62 244.8l76.164-76.163c9.56-9.56 9.56-25.06 0-34.62z"></path>
-                </svg>
-            </button>
+<main class="main-content px-4 py-8 md:flex-1 md:p-12 md:overflow-y-auto relative"
+      x-data="{ organizationName: $wire.form.name, isSubmit: false}">
+    <div
+        class="dissolve absolute top-6 left-24 flex items-center justify-between mb-8 max-w-3xl bg-green-500 rounded w-full hidden"
+        @spinner-ended.window="
+        $el.classList.remove('hidden');
+        setTimeout(() => {$el.classList.add('hidden')}, 2000);">
+        <div class="flex items-center">
+            <svg class="shrink-0 ml-4 mr-2 w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 20 20">
+                <polygon points="0 11 2 9 7 14 18 3 20 5 7 18"></polygon>
+            </svg>
+            <div class="py-4 text-white text-sm font-medium" x-html="$wire.feedback"></div>
         </div>
-    </template>
+        <button type="button" class="group mr-2 p-2" @click="showFeedback = false">
+            <svg class="block w-2 h-2 fill-green-800 group-hover:fill-white" xmlns="http://www.w3.org/2000/svg"
+                 width="235.908" height="235.908" viewBox="278.046 126.846 235.908 235.908">
+                <path
+                    d="M506.784 134.017c-9.56-9.56-25.06-9.56-34.62 0L396 210.18l-76.164-76.164c-9.56-9.56-25.06-9.56-34.62 0-9.56 9.56-9.56 25.06 0 34.62L361.38 244.8l-76.164 76.165c-9.56 9.56-9.56 25.06 0 34.62 9.56 9.56 25.06 9.56 34.62 0L396 279.42l76.164 76.165c9.56 9.56 25.06 9.56 34.62 0 9.56-9.56 9.56-25.06 0-34.62L430.62 244.8l76.164-76.163c9.56-9.56 9.56-25.06 0-34.62z"></path>
+            </svg>
+        </button>
+    </div>
     <div class="px-4 py-8 md:flex-1 md:p-12 md:overflow-y-auto"
          scroll-region="">
-        <div x-data="{ organizationName: $wire.form.name, isSubmit: false}" x-init="$watch('isSubmit', () => {
-            setTimeout(function() {
-                        isSubmit = false;
-                    }, 500)
-        })">
+        <div>
             <h1 class="mb-8 text-3xl font-bold">
                 <a class="text-indigo-400 hover:text-indigo-600"
                    href="/organizations">Organizations</a>
@@ -149,7 +139,12 @@
                                 type="button">Delete Organization
                         </button>
                         <button class="flex items-center btn-indigo ml-auto"
-                                type="submit" @click="isSubmit = true">
+                                type="submit" @click="isSubmit = true"
+                                @organization-edit.window="setTimeout(function(){
+                                    isSubmit = false;
+                                    $dispatch('spinner-ended')
+                                },1000);"
+                        >
                             <template x-if="isSubmit">
                                 <div class="btn-spinner mr-2"></div>
                             </template>
