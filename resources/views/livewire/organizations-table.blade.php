@@ -1,5 +1,4 @@
 <main class="main-content px-4 py-8 md:flex-1 md:p-12 md:overflow-y-auto">
-    {{--    <livewire:reactive-input/>--}}
     <h1 class="mb-8 text-3xl font-bold">Organizations</h1>
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center mr-4 w-full max-w-md">
@@ -23,13 +22,14 @@
                        wire:model.live.="search"
                 >
                 <button x-show="searchButton" type="submit"
-                        class="focus:z-10 px-4 hover:bg-gray-100 border-r focus:border-white rounded-l focus:ring md:px-6" disabled>
+                        class="focus:z-10 px-4 hover:bg-gray-100 border-r focus:border-white rounded-l focus:ring md:px-6"
+                        disabled>
                     Search
                 </button>
             </form>
         </div>
         <a class="btn-indigo"
-           href="/organizations/create"><span>Create</span><span class="hidden md:inline">&nbsp;Organization</span></a>
+           href="/organizations/create" wire:navigate.hover><span>Create</span><span class="hidden md:inline">&nbsp;Organization</span></a>
     </div>
     <div class="bg-white rounded-md shadow overflow-x-auto">
         <table class="w-full whitespace-nowrap">
@@ -44,28 +44,29 @@
             </thead>
             <tbody>
             @foreach($this->organizations as $organization)
-                <tr class="hover:bg-gray-100 focus-within:bg-gray-100">
-                    <td class="border-t"><a class="flex items-center px-6 py-4 focus:text-indigo-500"
-                                            href="/organizations/{{ $organization->id }}/edit">{{ $organization->name }}</a>
+                <tr class="hover:bg-gray-100 focus-within:bg-gray-100 relative">
+                    <td class="border-t">
+                        <a class="absolute inset-0"
+                           href="/organizations/{{ $organization->id }}/edit" wire:navigate
+                           wire:key="{{ $organization->id }}">
+                            <span class="sr-only px-6 py-4 focus:text-indigo-500">{{ $organization->name }}</span>
+                        </a>
+                        <span class="inline-block px-6 py-4">{{ $organization->name }}</span>
                     </td>
-                    <td class="border-t"><a class="flex items-center px-6 py-4"
-                                            tabindex="-1"
-                                            href="/organizations/{{ $organization->id }}/edit">{{ $organization->city }}</a>
+                    <td class="border-t">
+                        <span class="inline-block px-6 py-4">{{ $organization->city }}</span>
                     </td>
-                    <td class="border-t"><a class="flex items-center px-6 py-4"
-                                            tabindex="-1"
-                                            href="/organizations/{{ $organization->id }}/edit">{{ $organization->phone }}</a>
+                    <td class="border-t">
+                        <span class="inline-block px-6 py-4">{{ $organization->phone }}</span>
                     </td>
-                    <td class="w-px border-t"><a class="flex items-center px-4"
-                                                 tabindex="-1"
-                                                 href="/organizations/{{ $organization->id }}/edit">
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 20 20"
-                                 class="block w-6 h-6 fill-gray-400">
-                                <polygon
-                                    points="12.95 10.707 13.657 10 8 4.343 6.586 5.757 10.828 10 6.586 14.243 8 15.657 12.95 10.707"></polygon>
-                            </svg>
-                        </a></td>
+                    <td class="w-px border-t px-4">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 20 20"
+                             class="block w-6 h-6 fill-gray-400">
+                            <polygon
+                                points="12.95 10.707 13.657 10 8 4.343 6.586 5.757 10.828 10 6.586 14.243 8 15.657 12.95 10.707"></polygon>
+                        </svg>
+                    </td>
                 </tr>
             @endforeach
             </tbody>

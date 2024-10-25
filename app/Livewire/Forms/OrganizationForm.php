@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\Account;
 use App\Models\Organization;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
@@ -25,11 +26,13 @@ class OrganizationForm extends Form
     public $region;
     #[Validate]
     public $postal_code;
-
+    #[Validate]
+    public $account_id;
 
     public function setOrganization(Organization $organization)
     {
         $this->organization = $organization;
+        $this->account_id = $organization->account_id;
         $this->name = $organization->name;
         $this->email = $organization->email;
         $this->phone = $organization->phone;
@@ -51,6 +54,7 @@ class OrganizationForm extends Form
             'region' => ['max:50'],
             'country' => ['max:2', 'required'],
             'postal_code' => ['max:25'],
+            'account_id' => ['required', 'int']
         ];
     }
 
@@ -63,6 +67,8 @@ class OrganizationForm extends Form
 
     public function create()
     {
+        $this->account_id = Account::find(1)->id;
+
         $this->validate();
 
         Organization::create($this->all());
